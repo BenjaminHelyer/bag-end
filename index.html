@@ -1,0 +1,29 @@
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>My Website Home Page</title>
+    <script type = "text/javascript">  
+      function myfunction() {   
+      alert("How are you today?");  
+               }  
+    </script> 
+</head>
+<body>
+  <h1>Welcome to my website</h1>
+  <p>Now hosted on Amazon S3!</p>
+  <p>Click the following button to see the function in action</p>  
+  <input type = "button" onclick = "myfunction()" value = "Display">
+  <input type = "button" onclick = "count_visitors()" value = "Count">
+  <p> Visitor count: <span id="spanCount">0</span></p>
+  <script type = "text/javascript">
+    function count_visitors() {
+      var countHTML = document.getElementById("spanCount");
+      var countActual = 0;
+      var countActual = parseInt(countHTML.innerHTML);
+      countActual = countActual + 1;
+      countHTML.innerHTML = countActual;
+      alert("How are you" + countHTML); 
+    }
+    // window.onload = counter_fn;
+  </script>
+</body>
+</html>
