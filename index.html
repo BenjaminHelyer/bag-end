@@ -1,60 +1,58 @@
-<html xmlns="http://www.w3.org/1999/xhtml" >
+<!DOCTYPE html>
+<html>
 <head>
-    <title>My Website Home Page</title>
-    <script type = "text/javascript">  
-      function myfunction() {   
-      alert("How are you today?");  
-               }  
-    </script> 
+    <meta charset="UTF-8">
+    <title>Hello World</title>
+    <!-- Add some CSS to change client UI -->
+    <style>
+    body {
+        background-color: #232F3E;
+        }
+    label, button {
+        color: #FF9900;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 20px;
+        margin-left: 40px;
+        }
+     input {
+        color: #232F3E;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 20px;
+        margin-left: 20px;
+        }
+    </style>
+    <script>
+        // define the callAPI function that takes a first name and last name as parameters
+        var callAPI = (firstName,lastName)=>{
+            // instantiate a headers object
+            var myHeaders = new Headers();
+            // add content type header to object
+            myHeaders.append("Content-Type", "application/json");
+            // using built in JSON utility package turn object to string and store in a variable
+            var raw = JSON.stringify({"firstName":firstName,"lastName":lastName});
+            // create a JSON object with parameters for API call and store in a variable
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            // make API call with parameters and use promises to get response
+            fetch("YOUR-API-INVOKE-URL", requestOptions)
+            .then(response => response.text())
+            .then(result => alert(JSON.parse(result).message))
+            .catch(error => console.log('error', error));
+        }
+    </script>
 </head>
 <body>
-  <h1>Welcome to my website</h1>
-  <p>Now hosted on Amazon S3!</p>
-  <p>Click the following button to see the function in action</p>  
-  <input type = "button" onclick = "myfunction()" value = "Display">
-  <input type = "button" onclick = "count_visitors()" value = "Count">
-  <p> Visitor count: <span id="spanCount">0</span></p>
-  <script type = "text/javascript">
-    function count_visitors() {
-      var countHTML = document.getElementById("spanCount");
-      var countActual = 0;
-      var countActual = parseInt(countHTML.innerHTML);
-      countActual = countActual + 1;
-      countHTML.innerHTML = countActual;
-      alert("How are you" + countHTML); 
-    }
-    // window.onload = counter_fn;
-  </script>
-  <script>
-    // define the callAPI function that takes a first name and last name as parameters
-    var callAPI = (firstName,lastName)=>{
-        // instantiate a headers object
-        var myHeaders = new Headers();
-        // add content type header to object
-        myHeaders.append("Content-Type", "application/json");
-        // using built in JSON utility package turn object to string and store in a variable
-        var raw = JSON.stringify({"firstName":firstName,"lastName":lastName});
-        // create a JSON object with parameters for API call and store in a variable
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-        // make API call with parameters and use promises to get response
-        fetch("YOUR-API-INVOKE-URL", requestOptions)
-        .then(response => response.text())
-        .then(result => alert(JSON.parse(result).message))
-        .catch(error => console.log('error', error));
-    }
-  </script>
-  <form>
-    <label>First Name :</label>
-    <input type="text" id="fName">
-    <label>Last Name :</label>
-    <input type="text" id="lName">
-    <!-- set button onClick method to call function we defined passing input values as parameters -->
-    <button type="button" onclick="callAPI(document.getElementById('fName').value,document.getElementById('lName').value)">Call API</button>
-  </form>
+    <form>
+        <label>First Name :</label>
+        <input type="text" id="fName">
+        <label>Last Name :</label>
+        <input type="text" id="lName">
+        <!-- set button onClick method to call function we defined passing input values as parameters -->
+        <button type="button" onclick="callAPI(document.getElementById('fName').value,document.getElementById('lName').value)">Call API</button>
+    </form>
 </body>
 </html>
