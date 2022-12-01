@@ -5,9 +5,19 @@ jobs:
   check-bats-version:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      
+      - name: Run linter
+
+      - name: Run tests
+
+      - name: Deploy static site to S3 bucket
+        run: aws s3 sync ./public/ s3://arn:aws:s3:::bag-end --delete
