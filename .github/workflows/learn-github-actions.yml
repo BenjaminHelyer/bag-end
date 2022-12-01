@@ -19,4 +19,4 @@ jobs:
         run: aws s3 sync . s3://bag-end --exclude "./git*" --exclude ".github/*"
       
       - name: Remove unwanted /.git folder from S3 bucket (sync --exclude appears to have confirmed issues)
-        run: aws s3 rm s3://my-bucket/.git/ --recursive
+        run: aws s3 rm s3://my-bucket/.git/ --recursive --exclude ""
