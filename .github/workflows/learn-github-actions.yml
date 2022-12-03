@@ -1,5 +1,5 @@
-name: learn-github-actions
-run-name: ${{ github.actor }} is learning GitHub Actions
+name: deploy-aws-s3
+run-name: ${{ github.actor }} is deploying to AWS S3.
 on: [push]
 jobs:
   deploy-s3-bucket:
