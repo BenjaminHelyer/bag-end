@@ -6,7 +6,7 @@ def lambda_handler(event, context):
 
     response = {
         "statusCode": 200,
-        "updatedResponse": 1,
+        "updatedResponse": 2,
         "headers": {
             "Content-Type": "application/json"
         },
