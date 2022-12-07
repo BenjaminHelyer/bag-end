@@ -22,4 +22,4 @@ jobs:
         run: sam package --template-file aws-sam/sam-template.yml --output-template-file package.yml --s3-bucket sam-package-bagend
 
       - name: Deploy AWS SAM file
-        run: sam deploy --template-file package.yml --stack-name bagend-app-2 --capabilities CAPABILITY_IAM
+        run: sam deploy --template-file package.yml --stack-name bagend-app --capabilities CAPABILITY_IAM
