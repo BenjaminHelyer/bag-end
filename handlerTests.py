@@ -1,5 +1,5 @@
 import unittest
-from myDateTimeFunction import lambda_handler
+from processCounter import lambda_handler
 import json
 
 class JsonsForTesting():
