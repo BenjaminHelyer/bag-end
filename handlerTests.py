@@ -6,10 +6,10 @@ class JsonsForTesting():
     """
     Holds some JSONS that will be used in testing.
     """
-    books = {
-            "name": "Les Miserables",
-            "author": "Victor Hugo",
-            "century": "19th"
+    getRequest = {
+            "http": {
+                "method": "GET"
+            }
         }
 
 class TestLambda(unittest.TestCase):
@@ -24,7 +24,10 @@ class TestLambda(unittest.TestCase):
 
         expectedResult = {
             "statusCode": 400,
-            "description": "Error: event object passed to Lambda function is empty"
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": "{ \"message\": \"Error: event object passed to Lambda function is empty\" }"
         }   
 
         # gets the result from the Lambda handler function
@@ -33,27 +36,21 @@ class TestLambda(unittest.TestCase):
         # assert whether the tests are equal
         self.assertEqual(result, expectedResult)
 
-    def test_books(self):
+    def test_get_request(self):
         """
-        Unit test for the books.json file.
+        Unit test for a GET request from the API.
         """
-        
+
         expectedResult = {
             "statusCode": 200,
-            "updatedResponse": 3,
             "headers": {
                 "Content-Type": "application/json"
             },
-            "body": json.dumps({
-                "Region ": "us-east-1"
-            }),
-            "name": "Les Miserables"
+            "body": "{ \"message\": \"I received a GET Request\" }"
         }
 
-        # gets the result from the Lambda handler function
-        result = lambda_handler(JsonsForTesting.books, None)
+        result = lambda_handler(JsonsForTesting.getRequest, None)
 
-        # assert whether the tests are equal
         self.assertEqual(result, expectedResult)
 
 
