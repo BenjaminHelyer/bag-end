@@ -9,6 +9,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
         with:
@@ -21,13 +28,6 @@ jobs:
 
       - name: Run Python tests
         run: python -m unittest handlerTests.py
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
           
       - name: Package AWS SAM file
         run: sam package --template-file sam-template.yml --output-template-file package.yml --s3-bucket sam-package-bagend
