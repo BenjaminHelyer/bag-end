@@ -40,7 +40,7 @@ class TestLambda(unittest.TestCase):
         
         expectedResult = {
             "statusCode": 200,
-            "updatedResponse": 2,
+            "updatedResponse": 3,
             "headers": {
                 "Content-Type": "application/json"
             },
