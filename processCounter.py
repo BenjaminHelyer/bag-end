@@ -1,5 +1,6 @@
 import os
 import json
+import boto3
         
 def lambda_handler(event, context):
     """
@@ -16,12 +17,15 @@ def lambda_handler(event, context):
         "body": "{}"
     }
 
+    # object that instantiates the database so we can interact with it
+    database = Db()
+
     # dictionary for functions to perform on a given operation
     opsFuncs = {
-        'POST' : Db.create,
-        'GET' : Db.read,
-        'PUT' : Db.update,
-        'DELETE': Db.delete
+        'POST' : database.create,
+        'GET' : database.read,
+        'PUT' : database.update,
+        'DELETE': database.delete
     }
 
     # I'm not sure how to gracefully handle the case where it's passed an empty event
@@ -44,21 +48,29 @@ def lambda_handler(event, context):
 
     return response
 
-class Db():
+class Db:
     """
     Class that holds functions and information for interacting with the database.
     """
-    def create(payload):
+    def __init__(self,tableName='bagend-app-CountTable-UQA7T802H60N'):
+        # should likely find a way such that the table name can be changed here when we update it in AWS SAM
+        self.tableName = tableName
+        # should also likely find a way such that the development table isn't the same as the production table
+        # neither this nor the previous comment are *essential* for this project, so keeping it this way for now
+        self.dynamo = boto3.resource('dynamodb').Table(self.tableName)
+
+    def create(self, payload):
+        self.dynamo.put_item(Item=payload)
         return "{ \"message\": \"I received a POST Request\" }"
-    def read(payload):
+    def read(self, payload):
         return "{ \"message\": \"I received a GET Request\" }"
-    def update(payload):
+    def update(self, payload):
         return "{ \"message\": \"I received a PUT Request\" }"
-    def delete(payload):
+    def delete(self, payload):
         return "{ \"message\": \"I received a DELETE Request\" }"
 
 
-class ErrorHandler():
+class ErrorHandler:
     """
     Class that holds functions and information relating to errors.
     """

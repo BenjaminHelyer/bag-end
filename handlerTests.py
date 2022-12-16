@@ -2,7 +2,7 @@ import unittest
 from processCounter import lambda_handler
 import json
 
-class JsonsForTesting():
+class JsonsForTesting:
     """
     Holds some JSONS that will be used in testing.
     """
@@ -18,22 +18,25 @@ class JsonsForTesting():
 
     postRequest = {
             "operation": "POST",
-            "payload": ""
+            "payload": {
+                    "id": "1234ABCD",
+                    "number": 5
+                }
         }
 
     getRequest = {
             "operation": "GET",
-            "payload": ""
+            "payload": "{ myKey : myVal }"
         }
 
     putRequest = {
             "operation": "PUT",
-            "payload": ""
+            "payload": "{ myKey : myVal }"
         }
 
     deleteRequest = {
             "operation": "DELETE",
-            "payload": ""
+            "payload": "{ myKey : myVal }"
         }
 
     
