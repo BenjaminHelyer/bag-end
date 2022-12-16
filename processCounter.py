@@ -60,7 +60,7 @@ class Db:
         self.dynamo = boto3.resource('dynamodb').Table(self.tableName)
 
     def create(self, payload):
-        self.dynamo.put_item(Item=payload)
+        self.dynamo.put_item(Item=payload) # we have to put the arguments this way since the function only accepts keyword arguments
         return "{ \"message\": \"I received a POST Request\" }"
     def read(self, payload):
         return "{ \"message\": \"I received a GET Request\" }"
