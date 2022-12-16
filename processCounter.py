@@ -7,13 +7,6 @@ def lambda_handler(event, context):
         'operation': operation for interacting with the database
         'payload': payload for the database
     """
-    # put it this way for local testing for now
-    # will adjust later once we figure out a way to do this locally
-    try:
-        json_region = os.environ['AWS_REGION']
-    except:
-        json_region = "us-east-1"
-
     # default response so we can adjust the parts we need later
     response = {
         "statusCode": 200,
@@ -66,6 +59,9 @@ class Db():
 
 
 class ErrorHandler():
+    """
+    Class that holds functions and information relating to errors.
+    """
     emptyEventResponse = {
         "statusCode": 400,
             "headers": {
