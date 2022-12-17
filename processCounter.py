@@ -60,14 +60,20 @@ class Db:
         self.dynamo = boto3.resource('dynamodb').Table(self.tableName)
 
     def create(self, payload):
-        self.dynamo.put_item(Item=payload) # we have to put the arguments this way since the function only accepts keyword arguments
-        return "{ \"message\": \"I received a POST Request\" }"
+        dbResponse = self.dynamo.put_item(Item=payload) # we have to put the arguments this way since the function only accepts keyword arguments
+        return "{ \"message\": \"The response to the POST request was \" }"
+
     def read(self, payload):
-        return "{ \"message\": \"I received a GET Request\" }"
+        dbResponse = self.dynamo.get_item(Key=payload)
+        return "{ \"message\": \"The response to the GET request was \" }"
+
     def update(self, payload):
-        return "{ \"message\": \"I received a PUT Request\" }"
+        dbResponse = self.dynamo.update_item(Key=payload)
+        return "{ \"message\": \"The response to the PUT request was \" }"
+        
     def delete(self, payload):
-        return "{ \"message\": \"I received a DELETE Request\" }"
+        dbResponse = self.dynamo.delete_item(Key=payload)
+        return "{ \"message\": \"The response to the DELETE request was \" }"
 
 
 class ErrorHandler:

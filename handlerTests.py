@@ -26,17 +26,23 @@ class JsonsForTesting:
 
     getRequest = {
             "operation": "GET",
-            "payload": "{ myKey : myVal }"
+            "payload": {
+                    "id": "1234ABCD"
+                }
         }
 
     putRequest = {
             "operation": "PUT",
-            "payload": "{ myKey : myVal }"
+            "payload": {
+                    "id": "1234ABCD"
+                }
         }
 
     deleteRequest = {
             "operation": "DELETE",
-            "payload": "{ myKey : myVal }"
+            "payload": {
+                    "id": "1234ABCD"
+                }
         }
 
     
@@ -109,7 +115,7 @@ class TestLambda(unittest.TestCase):
             "headers": {
                 "Content-Type": "application/json"
             },
-            "body": "{ \"message\": \"I received a POST Request\" }"
+            "body": "{ \"message\": \"The response to the POST request was \" }"
         }
 
         result = lambda_handler(JsonsForTesting.postRequest, None)
@@ -126,7 +132,7 @@ class TestLambda(unittest.TestCase):
             "headers": {
                 "Content-Type": "application/json"
             },
-            "body": "{ \"message\": \"I received a GET Request\" }"
+            "body": "{ \"message\": \"The response to the GET request was \" }"
         }
 
         result = lambda_handler(JsonsForTesting.getRequest, None)
@@ -143,29 +149,29 @@ class TestLambda(unittest.TestCase):
             "headers": {
                 "Content-Type": "application/json"
             },
-            "body": "{ \"message\": \"I received a PUT Request\" }"
+            "body": "{ \"message\": \"The response to the PUT request was \" }"
         }
 
         result = lambda_handler(JsonsForTesting.putRequest, None)
 
         self.assertEqual(result, expectedResult)
 
-    def test_delete_request(self):
-        """
-        Unit test for a DELETE request from the API.
-        """
+    # def test_delete_request(self):
+        # """
+        # Unit test for a DELETE request from the API.
+        # """
 
-        expectedResult = {
-            "statusCode": 200,
-            "headers": {
-                "Content-Type": "application/json"
-            },
-            "body": "{ \"message\": \"I received a DELETE Request\" }"
-        }
+        # expectedResult = {
+            # "statusCode": 200,
+            # "headers": {
+                # "Content-Type": "application/json"
+            # },
+            # "body": "{ \"message\": \"The response to the DELETE request was \" }"
+        # }
 
-        result = lambda_handler(JsonsForTesting.deleteRequest, None)
+        # result = lambda_handler(JsonsForTesting.deleteRequest, None)
 
-        self.assertEqual(result, expectedResult)
+        # self.assertEqual(result, expectedResult)
 
 
 

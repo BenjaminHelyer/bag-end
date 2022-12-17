@@ -4,7 +4,7 @@ AWSTemplateFormatVersion : '2010-09-09'
 # essentially, an AWS Cloud Formation Transform specifies the macros that AWS will use to parse the template
 # there are other templates available
 Transform: AWS::Serverless-2016-10-31
-Description: A sample SAM template for deploying Lambda functions.
+Description: The SAM template for our backend resources.
 
 # Here is the Resources section, which can specify both SAM resources and Cloud Formation resources
 # This section, along with the Transform section, is required
