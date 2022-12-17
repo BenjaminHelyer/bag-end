@@ -16,30 +16,30 @@ class JsonsForTesting:
             "payload": "bear"
         }
 
-    postRequest = {
-            "operation": "POST",
+    createRequest = {
+            "operation": "create",
             "payload": {
                     "id": "1234ABCD",
                     "number": 5
                 }
         }
 
-    getRequest = {
-            "operation": "GET",
+    readRequest = {
+            "operation": "read",
             "payload": {
                     "id": "1234ABCD"
                 }
         }
 
-    putRequest = {
-            "operation": "PUT",
+    updateRequest = {
+            "operation": "update",
             "payload": {
                     "id": "1234ABCD"
                 }
         }
 
     deleteRequest = {
-            "operation": "DELETE",
+            "operation": "delete",
             "payload": {
                     "id": "1234ABCD"
                 }
@@ -115,10 +115,10 @@ class TestLambda(unittest.TestCase):
             "headers": {
                 "Content-Type": "application/json"
             },
-            "body": "{ \"message\": \"The response to the POST request was \" }"
+            "body": "{ \"message\": \"The response to the 'create' request was \" }"
         }
 
-        result = lambda_handler(JsonsForTesting.postRequest, None)
+        result = lambda_handler(JsonsForTesting.createRequest, None)
 
         self.assertEqual(result, expectedResult)
 
@@ -132,10 +132,10 @@ class TestLambda(unittest.TestCase):
             "headers": {
                 "Content-Type": "application/json"
             },
-            "body": "{ \"message\": \"The response to the GET request was \" }"
+            "body": "{ \"message\": \"The response to the 'read' request was \" }"
         }
 
-        result = lambda_handler(JsonsForTesting.getRequest, None)
+        result = lambda_handler(JsonsForTesting.readRequest, None)
 
         self.assertEqual(result, expectedResult)
 
@@ -149,10 +149,10 @@ class TestLambda(unittest.TestCase):
             "headers": {
                 "Content-Type": "application/json"
             },
-            "body": "{ \"message\": \"The response to the PUT request was \" }"
+            "body": "{ \"message\": \"The response to the 'update' request was \" }"
         }
 
-        result = lambda_handler(JsonsForTesting.putRequest, None)
+        result = lambda_handler(JsonsForTesting.updateRequest, None)
 
         self.assertEqual(result, expectedResult)
 
@@ -166,7 +166,7 @@ class TestLambda(unittest.TestCase):
             # "headers": {
                 # "Content-Type": "application/json"
             # },
-            # "body": "{ \"message\": \"The response to the DELETE request was \" }"
+            # "body": "{ \"message\": \"The response to the 'delete' request was \" }"
         # }
 
         # result = lambda_handler(JsonsForTesting.deleteRequest, None)

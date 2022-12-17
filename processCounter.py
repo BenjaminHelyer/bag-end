@@ -22,10 +22,10 @@ def lambda_handler(event, context):
 
     # dictionary for functions to perform on a given operation
     opsFuncs = {
-        'POST' : database.create,
-        'GET' : database.read,
-        'PUT' : database.update,
-        'DELETE': database.delete
+        'create' : database.create,
+        'read' : database.read,
+        'update' : database.update,
+        'delete': database.delete
     }
 
     # I'm not sure how to gracefully handle the case where it's passed an empty event
@@ -61,19 +61,19 @@ class Db:
 
     def create(self, payload):
         dbResponse = self.dynamo.put_item(Item=payload) # we have to put the arguments this way since the function only accepts keyword arguments
-        return "{ \"message\": \"The response to the POST request was \" }"
+        return "{ \"message\": \"The response to the 'create' request was \" }"
 
     def read(self, payload):
         dbResponse = self.dynamo.get_item(Key=payload)
-        return "{ \"message\": \"The response to the GET request was \" }"
+        return "{ \"message\": \"The response to the 'read' request was \" }"
 
     def update(self, payload):
         dbResponse = self.dynamo.update_item(Key=payload)
-        return "{ \"message\": \"The response to the PUT request was \" }"
+        return "{ \"message\": \"The response to the 'update' request was \" }"
 
     def delete(self, payload):
         dbResponse = self.dynamo.delete_item(Key=payload)
-        return "{ \"message\": \"The response to the DELETE request was \" }"
+        return "{ \"message\": \"The response to the 'delete' request was \" }"
 
 
 class ErrorHandler:
