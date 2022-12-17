@@ -9,9 +9,13 @@ Description: The SAM template for our backend resources.
 # Here is the Resources section, which can specify both SAM resources and Cloud Formation resources
 # This section, along with the Transform section, is required
 Resources:
+  BagEndApiGateway:
+      Type: AWS::Serverless::Api
+      Properties:
+        StageName: prod
 # Details about the myDateTimeFunction Lambda function
 # This is the main Lambda function in this template. The other two functions are used to run tests on the code before and after deployment.
-  myDateTimeFunction:
+  ProcessCounter:
     # The AWS::Severless::Function type creates a Lambda function, IAM role for that function, and event mappings
     Type: AWS::Serverless::Function
     Properties:
@@ -33,7 +37,16 @@ Resources:
             Resource: '*'
       DeploymentPreference:
 # Specifies the deployment configuration      
-          Type: AllAtOnce
+          Type: AllAtOnce # this will make GitHub Actions complete faster, which is good for this project
+# This adds a "GET" endpoint to our API Gateway
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /
+            Method: get
+            RestApiId:
+              Ref: BagEndApiGateway
   CountTable:
     Type: AWS::DynamoDB::Table
     Properties: 
