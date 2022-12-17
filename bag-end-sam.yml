@@ -44,7 +44,7 @@ Resources:
           Type: Api
           Properties:
             Path: /
-            Method: get
+            Method: post
             RestApiId:
               Ref: BagEndApiGateway
   CountTable:

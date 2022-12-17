@@ -70,7 +70,7 @@ class Db:
     def update(self, payload):
         dbResponse = self.dynamo.update_item(Key=payload)
         return "{ \"message\": \"The response to the PUT request was \" }"
-        
+
     def delete(self, payload):
         dbResponse = self.dynamo.delete_item(Key=payload)
         return "{ \"message\": \"The response to the DELETE request was \" }"
