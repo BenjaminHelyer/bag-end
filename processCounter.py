@@ -60,7 +60,8 @@ class Db:
         self.dynamo = boto3.resource('dynamodb').Table(self.tableName)
 
     def create(self, payload):
-        dbResponse = self.dynamo.put_item(Item=payload) # we have to put the arguments this way since the function only accepts keyword arguments
+        itemToCreate = payload['Item']
+        dbResponse = self.dynamo.put_item(Item=itemToCreate) # we have to put the arguments this way since the function only accepts keyword arguments
         return "{ \"message\": \"The response to the 'create' request was \" }"
 
     def read(self, payload):

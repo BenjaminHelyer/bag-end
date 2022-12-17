@@ -19,9 +19,11 @@ class JsonsForTesting:
     createRequest = {
             "operation": "create",
             "payload": {
+                "Item": {
                     "id": "1234ABCD",
                     "number": 5
                 }
+            }
         }
 
     readRequest = {
@@ -105,9 +107,9 @@ class TestLambda(unittest.TestCase):
 
         self.assertEqual(result, expectedResult)
 
-    def test_post_request(self):
+    def test_create_request(self):
         """
-        Unit test for a POST request from the API.
+        Unit test for a 'create' operation from the API.
         """
 
         expectedResult = {
@@ -122,9 +124,9 @@ class TestLambda(unittest.TestCase):
 
         self.assertEqual(result, expectedResult)
 
-    def test_get_request(self):
+    def test_read_request(self):
         """
-        Unit test for a GET request from the API.
+        Unit test for a 'read' request from the API.
         """
 
         expectedResult = {
@@ -139,9 +141,9 @@ class TestLambda(unittest.TestCase):
 
         self.assertEqual(result, expectedResult)
 
-    def test_put_request(self):
+    def test_update_request(self):
         """
-        Unit test for a PUT request from the API.
+        Unit test for a 'update' request from the API.
         """
 
         expectedResult = {
@@ -158,7 +160,7 @@ class TestLambda(unittest.TestCase):
 
     # def test_delete_request(self):
         # """
-        # Unit test for a DELETE request from the API.
+        # Unit test for a 'delete' request from the API.
         # """
 
         # expectedResult = {
