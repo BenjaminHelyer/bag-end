@@ -83,7 +83,7 @@ class TestLambda(unittest.TestCase):
                 "headers": {
                     "Content-Type": "application/json"
                 },
-                "body": "{ \"message\": \"Error: unknown operation or payload\" }"
+                "body": "{ \"message\": \"Error: no operation found in event\" }"
         }
 
         result = lambda_handler(JsonsForTesting.junkRequest, None)
@@ -100,7 +100,7 @@ class TestLambda(unittest.TestCase):
                 "headers": {
                     "Content-Type": "application/json"
                 },
-                "body": "{ \"message\": \"Error: unknown operation or payload\" }"
+                "body": "{ \"message\": \"Error: bad operation or payload\" }"
         }
 
         result = lambda_handler(JsonsForTesting.anotherJunkRequest, None)

@@ -36,7 +36,7 @@ def lambda_handler(event, context):
         response = ErrorHandler.emptyEventResponse
     elif 'operation' not in event.keys():
         # case in which we don't even have an operation key in the event
-        response = ErrorHandler.badOpPayload
+        response = ErrorHandler.noOpKey
     else:
         if event['operation'] in opsFuncs and event['payload'] is not None:
             # call the relevent function from the Db class with the given payload
@@ -83,16 +83,24 @@ class ErrorHandler:
     """
     emptyEventResponse = {
         "statusCode": 400,
-            "headers": {
-                "Content-Type": "application/json"
-            },
-            "body": "{ \"message\": \"Error: event object passed to Lambda function is empty\" }"
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": "{ \"message\": \"Error: event object passed to Lambda function is empty\" }"
     }
 
     badOpPayload = {
         "statusCode": 400,
-            "headers": {
-                "Content-Type": "application/json"
-            },
-            "body": "{ \"message\": \"Error: unknown operation or payload\" }"
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": "{ \"message\": \"Error: bad operation or payload\" }"
+    }
+
+    noOpKey = {
+        "statusCode": 400,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": "{ \"message\": \"Error: no operation found in event\" }"
     }
