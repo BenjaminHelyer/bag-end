@@ -17,8 +17,11 @@ def lambda_handler(event, context):
         "body": "{}"
     }
 
-    # object that instantiates the database so we can interact with it
+    # object that instantiates the database
     database = Db()
+
+    # objects taht instantiates the error handler
+    err = ErrorHandler(event)
 
     # dictionary for functions to perform on a given operation
     opsFuncs = {
@@ -33,10 +36,10 @@ def lambda_handler(event, context):
     # Something like the following
     if event is None:
         # case where we don't even have an event
-        response = ErrorHandler.emptyEventResponse
+        response = err.emptyEventResponse
     elif 'operation' not in event.keys():
         # case in which we don't even have an operation key in the event
-        response = ErrorHandler.noOpKey
+        response = err.noOpKey
     else:
         if event['operation'] in opsFuncs and event['payload'] is not None:
             # call the relevent function from the Db class with the given payload
@@ -44,7 +47,7 @@ def lambda_handler(event, context):
             response["body"] = opsResult
         else:
             # send an error response indicating we got a bad operation or payload
-            response = ErrorHandler.badOpPayload
+            response = err.badOpPayload
 
     return response
 
@@ -81,26 +84,31 @@ class ErrorHandler:
     """
     Class that holds functions and information relating to errors.
     """
-    emptyEventResponse = {
-        "statusCode": 400,
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "body": "{ \"message\": \"Error: event object passed to Lambda function is empty\" }"
-    }
+    def __init__(self, event):
+        self.event = event
 
-    badOpPayload = {
-        "statusCode": 400,
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "body": "{ \"message\": \"Error: bad operation or payload\" }"
-    }
+        self.emptyEventResponse = {
+            "statusCode": 400,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": "{ \"message\": \"Error: event object passed to Lambda function is empty\" }"
+        }
 
-    noOpKey = {
-        "statusCode": 400,
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "body": "{ \"message\": \"Error: no operation found in event\" }"
+        self.badOpPayload = {
+            "statusCode": 400,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": "{ \"message\": \"Error: bad operation or payload\" }"
+        }
+
+        self.noOpKey = {
+            "statusCode": 400,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": "{ \"message\": \"Error: no operation found in event. Event was: "
+                    + str(self.event)
+                    + "\" }"
     }

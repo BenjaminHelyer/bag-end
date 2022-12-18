@@ -83,7 +83,9 @@ class TestLambda(unittest.TestCase):
                 "headers": {
                     "Content-Type": "application/json"
                 },
-                "body": "{ \"message\": \"Error: no operation found in event\" }"
+                "body": "{ \"message\": \"Error: no operation found in event. Event was: "
+                        + str(JsonsForTesting.junkRequest)
+                        + "\" }"
         }
 
         result = lambda_handler(JsonsForTesting.junkRequest, None)
