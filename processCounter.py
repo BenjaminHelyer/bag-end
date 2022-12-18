@@ -46,10 +46,18 @@ def lambda_handler(event, context):
             try:
                 # try to convert the body contents to a dict using the JSON loader
                 bodyAsDict = json.loads(event['body'])
+            except:
+                # give a clear error if we can't load it using the JSON library
+                response = err.badBodyFormat
+                return response
+            # at this point, turning the body into a dict succeeded
+            if 'operation' not in bodyAsDict.keys():
+                response = err.noOpKey
+            elif event['body']['operation'] not in opsFuncs or event['body']['payload'] is None:
+                response = err.badOpPayload
+            else:
                 opsResult = opsFuncs[bodyAsDict['operation']](bodyAsDict['payload'])
                 response['body'] = opsResult
-            except:
-                response = err.noOpKey
         elif event['body']['operation'] in opsFuncs and event['body']['payload'] is not None:
             # call the relevent function from the Db class with the given payload
             opsResult = opsFuncs[event['body']['operation']](event['body']['payload'])
@@ -127,7 +135,19 @@ class ErrorHandler:
             "headers": {
                 "Content-Type": "application/json"
             },
-            "body": "{ \"message\": \"Error: no operation found in event['body']. event['body'] was: "
+            "body": "{ \"message\": \"Error: event['body'] could be turned into dict, but no operation found in event['body']. event['body'] was: "
+                    + str(self.getEventBody())
+                    + "\" }"
+                    + "\n Type of event['body'] was: "
+                    + str(self.getEventBodyType())
+        }
+
+        self.badBodyFormat = {
+            "statusCode": 400,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": "{ \"message\": \"Error: event['body'] could not be turned into dict. event['body'] was: "
                     + str(self.getEventBody())
                     + "\" }"
                     + "\n Type of event['body'] was: "

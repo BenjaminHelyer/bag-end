@@ -192,28 +192,6 @@ class TestLambda(unittest.TestCase):
 
         self.assertEqual(result, expectedResult)
 
-    def test_op_string_request(self):
-        """
-        Unit test for the case where the operation is held as a string in event['body'].
-        This is what we suspect the events given by API Gateway are formatted as.
-        """
-
-        expectedResult = {
-            "statusCode": 400,
-            "headers": {
-                "Content-Type": "application/json"
-            },
-            "body": "{ \"message\": \"Error: no operation found in event['body']. event['body'] was: "
-                    + str(JsonsForTesting.opAsStringRequest['body'])
-                    + "\" }"
-                    + "\n Type of event['body'] was: "
-                    + str(type(JsonsForTesting.opAsStringRequest['body']))
-        }
-
-        result = lambda_handler(JsonsForTesting.opAsStringRequest, None)
-
-        self.assertEqual(result, expectedResult)
-
 
 
 if __name__ == '__main__':
