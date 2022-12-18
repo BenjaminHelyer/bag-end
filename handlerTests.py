@@ -12,39 +12,54 @@ class JsonsForTesting:
         }
 
     anotherJunkRequest = {
-            "operation": "elephant",
-            "payload": "bear"
+            "body": {
+                "operation": "elephant",
+                "payload": "bear"
+            }
         }
 
+    opAsStringRequest = {
+            "body": { "\n \"operation\": \"elephant\",\n\"payload\": \"bear\""
+            }
+    }
+
     createRequest = {
-            "operation": "create",
-            "payload": {
-                "Item": {
-                    "id": "1234ABCD",
-                    "number": 5
+            "body": {
+                "operation": "create",
+                "payload": {
+                    "Item": {
+                        "id": "1234ABCD",
+                        "number": 5
+                    }
                 }
             }
         }
 
     readRequest = {
-            "operation": "read",
-            "payload": {
-                    "id": "1234ABCD"
-                }
+            "body": {
+                "operation": "read",
+                "payload": {
+                        "id": "1234ABCD"
+                    }
+            }
         }
 
     updateRequest = {
-            "operation": "update",
-            "payload": {
-                    "id": "1234ABCD"
-                }
+            "body": {
+                "operation": "update",
+                "payload": {
+                        "id": "1234ABCD"
+                    }
+            }
         }
 
     deleteRequest = {
-            "operation": "delete",
-            "payload": {
-                    "id": "1234ABCD"
-                }
+            "body": {
+                "operation": "delete",
+                "payload": {
+                        "id": "1234ABCD"
+                    }
+            }
         }
 
     
@@ -83,7 +98,7 @@ class TestLambda(unittest.TestCase):
                 "headers": {
                     "Content-Type": "application/json"
                 },
-                "body": "{ \"message\": \"Error: no operation found in event. Event was: "
+                "body": "{ \"message\": \"Error: no body found in event. Event was: "
                         + str(JsonsForTesting.junkRequest)
                         + "\" }"
         }
@@ -160,22 +175,42 @@ class TestLambda(unittest.TestCase):
 
         self.assertEqual(result, expectedResult)
 
-    # def test_delete_request(self):
-        # """
-        # Unit test for a 'delete' request from the API.
-        # """
+    def test_delete_request(self):
+        """
+        Unit test for a 'delete' request from the API.
+        """
 
-        # expectedResult = {
-            # "statusCode": 200,
-            # "headers": {
-                # "Content-Type": "application/json"
-            # },
-            # "body": "{ \"message\": \"The response to the 'delete' request was \" }"
-        # }
+        expectedResult = {
+            "statusCode": 200,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": "{ \"message\": \"The response to the 'delete' request was \" }"
+        }
 
-        # result = lambda_handler(JsonsForTesting.deleteRequest, None)
+        result = lambda_handler(JsonsForTesting.deleteRequest, None)
 
-        # self.assertEqual(result, expectedResult)
+        self.assertEqual(result, expectedResult)
+
+    def test_op_string_request(self):
+        """
+        Unit test for the case where the operation is held as a string in event['body'].
+        This is what we suspect the events given by API Gateway are formatted as.
+        """
+
+        expectedResult = {
+            "statusCode": 400,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": "{ \"message\": \"Error: no operation found in event['body']. event['body'] was: "
+                    + str(JsonsForTesting.opAsStringRequest['body'])
+                    + "\" }"
+        }
+
+        result = lambda_handler(JsonsForTesting.opAsStringRequest, None)
+
+        self.assertEqual(result, expectedResult)
 
 
 

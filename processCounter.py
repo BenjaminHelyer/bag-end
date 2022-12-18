@@ -37,13 +37,16 @@ def lambda_handler(event, context):
     if event is None:
         # case where we don't even have an event
         response = err.emptyEventResponse
-    elif 'operation' not in event.keys():
+    elif 'body' not in event.keys():
         # case in which we don't even have an operation key in the event
-        response = err.noOpKey
+        response = err.noBodyKey
     else:
-        if event['operation'] in opsFuncs and event['payload'] is not None:
+        # now we know the event has a body. So now we test for the event's operation key
+        if type(event['body']) is not dict:
+            response = err.noOpKey
+        elif event['body']['operation'] in opsFuncs and event['body']['payload'] is not None:
             # call the relevent function from the Db class with the given payload
-            opsResult = opsFuncs[event['operation']](event['payload'])
+            opsResult = opsFuncs[event['body']['operation']](event['body']['payload'])
             response["body"] = opsResult
         else:
             # send an error response indicating we got a bad operation or payload
@@ -103,12 +106,31 @@ class ErrorHandler:
             "body": "{ \"message\": \"Error: bad operation or payload\" }"
         }
 
+        self.noBodyKey = {
+            "statusCode": 400,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": "{ \"message\": \"Error: no body found in event. Event was: "
+                    + str(self.event)
+                    + "\" }"
+        }
+
         self.noOpKey = {
             "statusCode": 400,
             "headers": {
                 "Content-Type": "application/json"
             },
-            "body": "{ \"message\": \"Error: no operation found in event. Event was: "
-                    + str(self.event)
+            "body": "{ \"message\": \"Error: no operation found in event['body']. event['body'] was: "
+                    + str(self.getEventBody())
                     + "\" }"
-    }
+        }
+
+    def getEventBody(self):
+        """
+        Function that we use to get event['body'], or gracefully feed back None if we can't.
+        """
+        try:
+            return self.event['body']
+        except:
+            return None
