@@ -43,11 +43,17 @@ def lambda_handler(event, context):
     else:
         # now we know the event has a body. So now we test for the event's operation key
         if type(event['body']) is not dict:
-            response = err.noOpKey
+            try:
+                # try to convert the body contents to a dict using the JSON loader
+                bodyAsDict = json.loads(event['body'])
+                opsResult = opsFuncs[bodyAsDict['operation']](bodyAsDict['payload'])
+                response['body'] = opsResult
+            except:
+                response = err.noOpKey
         elif event['body']['operation'] in opsFuncs and event['body']['payload'] is not None:
             # call the relevent function from the Db class with the given payload
             opsResult = opsFuncs[event['body']['operation']](event['body']['payload'])
-            response["body"] = opsResult
+            response['body'] = opsResult
         else:
             # send an error response indicating we got a bad operation or payload
             response = err.badOpPayload

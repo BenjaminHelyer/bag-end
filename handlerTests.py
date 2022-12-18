@@ -19,7 +19,7 @@ class JsonsForTesting:
         }
 
     opAsStringRequest = {
-            "body": { "\n \"operation\": \"elephant\",\n\"payload\": \"bear\""
+            "body": { "\n \"operation\": \"create\",\n\"payload\": \"Item\""
             }
     }
 
