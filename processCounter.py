@@ -124,6 +124,8 @@ class ErrorHandler:
             "body": "{ \"message\": \"Error: no operation found in event['body']. event['body'] was: "
                     + str(self.getEventBody())
                     + "\" }"
+                    + "\n Type of event['body'] was: "
+                    + str(self.getEventBodyType())
         }
 
     def getEventBody(self):
@@ -132,5 +134,14 @@ class ErrorHandler:
         """
         try:
             return self.event['body']
+        except:
+            return None
+
+    def getEventBodyType(self):
+        """
+        Function that we use to get the type of event['body'], or gracefully feed back None if we can't.
+        """
+        try:
+            return type(self.event['body'])
         except:
             return None

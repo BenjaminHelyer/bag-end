@@ -206,6 +206,8 @@ class TestLambda(unittest.TestCase):
             "body": "{ \"message\": \"Error: no operation found in event['body']. event['body'] was: "
                     + str(JsonsForTesting.opAsStringRequest['body'])
                     + "\" }"
+                    + "\n Type of event['body'] was: "
+                    + str(type(JsonsForTesting.opAsStringRequest['body']))
         }
 
         result = lambda_handler(JsonsForTesting.opAsStringRequest, None)
