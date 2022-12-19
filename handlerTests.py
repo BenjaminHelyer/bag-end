@@ -18,9 +18,21 @@ class JsonsForTesting:
             }
         }
 
-    opAsStringRequest = {
-            "body": { "\n \"operation\": \"create\",\n\"payload\": \"Item\""
-            }
+    badOpAsStringRequest = {
+            "body": "{ \n \"operation\": \"elephant\",\n\"payload\": \"Item\"}"
+    }
+
+    goodOpAsStringRequest = {
+            "body": """{
+                    "operation": "create",
+                    "payload": {
+                        "Item": {
+                            "id": "1234ABCD",
+                            "number": 5
+                        }
+                    }
+                }
+                """
     }
 
     createRequest = {
@@ -192,9 +204,46 @@ class TestLambda(unittest.TestCase):
 
         self.assertEqual(result, expectedResult)
 
+    def test_bad_op_str(self):
+        """
+        Unit test for a bad operation as a string within the body of the event.
+        """
+
+        expectedResult = {
+                "statusCode": 400,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": "{ \"message\": \"Error: bad operation or payload\" }"
+        }
+
+        result = lambda_handler(JsonsForTesting.badOpAsStringRequest, None)
+
+        self.assertEqual(result, expectedResult)
+
+    def test_good_op_str(self):
+        """
+        Unit test for a good operation as a string within the body of the event.
+        """
+
+        expectedResult = {
+                "statusCode": 200,
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                "body": "{ \"message\": \"The response to the 'create' request was \" }"
+        }
+
+        result = lambda_handler(JsonsForTesting.goodOpAsStringRequest, None)
+
+        self.assertEqual(result, expectedResult)
+
 
 
 if __name__ == '__main__':
     print("Testing the Lambda handler function.")
 
     unittest.main()
+
+    # myTests = TestLambda()
+    # myTests.test_bad_op_str()

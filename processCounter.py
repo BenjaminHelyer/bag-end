@@ -53,7 +53,7 @@ def lambda_handler(event, context):
             # at this point, turning the body into a dict succeeded
             if 'operation' not in bodyAsDict.keys():
                 response = err.noOpKey
-            elif event['body']['operation'] not in opsFuncs or event['body']['payload'] is None:
+            elif bodyAsDict['operation'] not in opsFuncs or bodyAsDict['payload'] is None:
                 response = err.badOpPayload
             else:
                 opsResult = opsFuncs[bodyAsDict['operation']](bodyAsDict['payload'])
