@@ -43,6 +43,7 @@ def lambda_handler(event, context):
     else:
         # now we know the event has a body. So now we test for the event's operation key
         if type(event['body']) is not dict:
+            # first of all, we try to convert the body contents using the JSON library
             try:
                 # try to convert the body contents to a dict using the JSON loader
                 bodyAsDict = json.loads(event['body'])
@@ -50,14 +51,20 @@ def lambda_handler(event, context):
                 # give a clear error if we can't load it using the JSON library
                 response = err.badBodyFormat
                 return response
+
             # at this point, turning the body into a dict succeeded
+            # now we test for a good operation, finally performing the operation if we find it
             if 'operation' not in bodyAsDict.keys():
                 response = err.noOpKey
             elif bodyAsDict['operation'] not in opsFuncs or bodyAsDict['payload'] is None:
                 response = err.badOpPayload
             else:
-                opsResult = opsFuncs[bodyAsDict['operation']](bodyAsDict['payload'])
-                response['body'] = opsResult
+                # have another error thrown here to catch what might be going wrong with API Gateway
+                try:
+                    opsResult = opsFuncs[bodyAsDict['operation']](bodyAsDict['payload'])
+                    response['body'] = opsResult
+                except:
+                    response = err.troublePerformingOpsFuncs
         elif event['body']['operation'] in opsFuncs and event['body']['payload'] is not None:
             # call the relevent function from the Db class with the given payload
             opsResult = opsFuncs[event['body']['operation']](event['body']['payload'])
@@ -148,6 +155,18 @@ class ErrorHandler:
                 "Content-Type": "application/json"
             },
             "body": "{ \"message\": \"Error: event['body'] could not be turned into dict. event['body'] was: "
+                    + str(self.getEventBody())
+                    + "\" }"
+                    + "\n Type of event['body'] was: "
+                    + str(self.getEventBodyType())
+        }
+
+        self.troublePerformingOpsFuncs = {
+            "statusCode": 400,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": "{ \"message\": \"Error: trouble performing operation functions. event['body'] was: "
                     + str(self.getEventBody())
                     + "\" }"
                     + "\n Type of event['body'] was: "
