@@ -92,9 +92,12 @@ class Db:
         return "{ \"message\": \"The response to the 'create' request was \" }"
 
     def read(self, payload):
-        dbResponse = self.dynamo.get_item(Key=payload)
-        return "{ \"message\": \"The response to the 'read' request was \" }"
-
+        keyToRead = {'id': payload['Item']['id']}
+        attributeKey = payload['Item']['attribute']
+        dbResponse = self.dynamo.get_item(Key=keyToRead)
+        attributeToReturn = dbResponse['Item'][attributeKey]
+        return """{ "message": "The response to the 'read' request was """ + str(attributeToReturn) + """ " } """
+            
     def update(self, payload):
         keyToUpdate = {'id': payload['Item']['id']}
 

@@ -49,6 +49,19 @@ class JsonsForTesting:
                 """
     }
 
+    readAsStringRequest = {
+        "body": """{
+                    "operation": "read",
+                    "payload": {
+                        "Item": {
+                            "id": "myCount",
+                            "attribute": "visCount"
+                        }
+                    }
+                }
+                """
+    }
+
     diffUpdateExpr = {
         "body": """{
                     "operation": "update",
@@ -172,23 +185,6 @@ class TestLambda(unittest.TestCase):
 
         self.assertEqual(result, expectedResult)
 
-    def test_read_request(self):
-        """
-        Unit test for a 'read' request from the API.
-        """
-
-        expectedResult = {
-            "statusCode": 200,
-            "headers": {
-                "Content-Type": "application/json"
-            },
-            "body": "{ \"message\": \"The response to the 'read' request was \" }"
-        }
-
-        result = lambda_handler(JsonsForTesting.readRequest, None)
-
-        self.assertEqual(result, expectedResult)
-
     def test_delete_request(self):
         """
         Unit test for a 'delete' request from the API.
@@ -274,6 +270,25 @@ class TestLambda(unittest.TestCase):
 
         self.assertEqual(result, expectedResult)
 
+    def test_read_as_str(self):
+        """
+        Tests a read request given as a string.
+        """
+
+        expectedResult = {
+                "statusCode": 200,
+                        "headers": {
+                            "Content-Type": "application/json"
+                        },
+                    "body": "{ \"message\": \"The response to the 'read' request was \" }"
+        }
+
+        result = lambda_handler(JsonsForTesting.readAsStringRequest, None)
+
+        # only assert equal the first chunk of the returned result, since the response which was read will change each time
+        self.assertEqual(str(result)[:80], str(expectedResult)[:80])
+
+
 
 
 if __name__ == '__main__':
@@ -282,4 +297,4 @@ if __name__ == '__main__':
     unittest.main()
 
     # myTests = TestLambda()
-    # myTests.test_update_as_str()
+    # myTests.test_read_as_str()
