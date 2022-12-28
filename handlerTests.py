@@ -80,7 +80,6 @@ class JsonsForTesting:
                     "payload": {
                         "Item": {
                             "id": "deletionTest"
-                            "number": 5
                         }
                     }
                 }
