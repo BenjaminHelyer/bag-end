@@ -62,6 +62,31 @@ class JsonsForTesting:
                 """
     }
 
+    deleteAsStringRequest = {
+        "body": """{
+                    "operation": "delete",
+                    "payload": {
+                        "Item": {
+                            "id": "deletionTest"
+                        }
+                    }
+                }
+                """
+    }
+
+    createItemToDelete = {
+        "body": """{
+                    "operation": "create",
+                    "payload": {
+                        "Item": {
+                            "id": "deletionTest"
+                            "number": 5
+                        }
+                    }
+                }
+                """
+    }
+
     diffUpdateExpr = {
         "body": """{
                     "operation": "update",
@@ -85,24 +110,6 @@ class JsonsForTesting:
                         "number": 5
                     }
                 }
-            }
-        }
-
-    readRequest = {
-            "body": {
-                "operation": "read",
-                "payload": {
-                        "id": "1234ABCD"
-                    }
-            }
-        }
-
-    deleteRequest = {
-            "body": {
-                "operation": "delete",
-                "payload": {
-                        "id": "1234ABCD"
-                    }
             }
         }
 
@@ -182,23 +189,6 @@ class TestLambda(unittest.TestCase):
         }
 
         result = lambda_handler(JsonsForTesting.createRequest, None)
-
-        self.assertEqual(result, expectedResult)
-
-    def test_delete_request(self):
-        """
-        Unit test for a 'delete' request from the API.
-        """
-
-        expectedResult = {
-            "statusCode": 200,
-            "headers": {
-                "Content-Type": "application/json"
-            },
-            "body": "{ \"message\": \"The response to the 'delete' request was \" }"
-        }
-
-        result = lambda_handler(JsonsForTesting.deleteRequest, None)
 
         self.assertEqual(result, expectedResult)
 
@@ -287,6 +277,28 @@ class TestLambda(unittest.TestCase):
 
         # only assert equal the first chunk of the returned result, since the response which was read will change each time
         self.assertEqual(str(result)[:80], str(expectedResult)[:80])
+
+    def test_delete_as_str(self):
+        """
+        Tests a delete request given as a string.
+        """
+
+        expectedResult = {
+                "statusCode": 200,
+                        "headers": {
+                            "Content-Type": "application/json"
+                        },
+                    "body": "{ \"message\": \"The response to the 'delete' request was \" }"
+        }
+
+        # first lets create a new index, then delete that index
+        lambda_handler(JsonsForTesting.createItemToDelete, None)
+
+        result = lambda_handler(JsonsForTesting.deleteAsStringRequest, None)
+
+        self.assertEqual(result, expectedResult)
+
+        
 
 
 

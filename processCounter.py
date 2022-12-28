@@ -115,7 +115,8 @@ class Db:
         return "{ \"message\": \"The response to the 'update' request was \" }"
 
     def delete(self, payload):
-        dbResponse = self.dynamo.delete_item(Key=payload)
+        keyToDelete = {'id': payload['Item']['id']}
+        dbResponse = self.dynamo.delete_item(Key=keyToDelete)
         return "{ \"message\": \"The response to the 'delete' request was \" }"
 
 
