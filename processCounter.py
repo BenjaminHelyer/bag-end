@@ -96,7 +96,19 @@ class Db:
         return "{ \"message\": \"The response to the 'read' request was \" }"
 
     def update(self, payload):
-        dbResponse = self.dynamo.update_item(Key=payload)
+        keyToUpdate = {'id': payload['Item']['id']}
+
+        if payload['Item']['expression'] == '++':
+            # expression for incrementing, which is the main expression we'll want for the visitor counter
+            attribute = str(payload['Item']['attribute'])
+            updateExpr = "set " + attribute + "=" + attribute + " + :val"
+            attrVals = {':val': 1}
+        else:
+            # let's not raise an error response here for now, though we likely should if this were in use by more people
+            return "{ \"message\": \"Only the increment expression is supported for now.\" }"
+
+        dbResponse = self.dynamo.update_item(Key=keyToUpdate, UpdateExpression=updateExpr, ExpressionAttributeValues=attrVals)
+
         return "{ \"message\": \"The response to the 'update' request was \" }"
 
     def delete(self, payload):

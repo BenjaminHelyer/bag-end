@@ -27,8 +27,36 @@ class JsonsForTesting:
                     "operation": "create",
                     "payload": {
                         "Item": {
+                            "id": "myCount",
+                            "visCount": 5
+                        }
+                    }
+                }
+                """
+    }
+
+    updateAsStringRequest = {
+        "body": """{
+                    "operation": "update",
+                    "payload": {
+                        "Item": {
+                            "id": "myCount",
+                            "attribute": "visCount",
+                            "expression": "++"
+                        }
+                    }
+                }
+                """
+    }
+
+    diffUpdateExpr = {
+        "body": """{
+                    "operation": "update",
+                    "payload": {
+                        "Item": {
                             "id": "1234ABCD",
-                            "number": 5
+                            "attribute": "elephants",
+                            "expression": "bad expression"
                         }
                     }
                 }
@@ -50,15 +78,6 @@ class JsonsForTesting:
     readRequest = {
             "body": {
                 "operation": "read",
-                "payload": {
-                        "id": "1234ABCD"
-                    }
-            }
-        }
-
-    updateRequest = {
-            "body": {
-                "operation": "update",
                 "payload": {
                         "id": "1234ABCD"
                     }
@@ -170,23 +189,6 @@ class TestLambda(unittest.TestCase):
 
         self.assertEqual(result, expectedResult)
 
-    def test_update_request(self):
-        """
-        Unit test for a 'update' request from the API.
-        """
-
-        expectedResult = {
-            "statusCode": 200,
-            "headers": {
-                "Content-Type": "application/json"
-            },
-            "body": "{ \"message\": \"The response to the 'update' request was \" }"
-        }
-
-        result = lambda_handler(JsonsForTesting.updateRequest, None)
-
-        self.assertEqual(result, expectedResult)
-
     def test_delete_request(self):
         """
         Unit test for a 'delete' request from the API.
@@ -238,6 +240,40 @@ class TestLambda(unittest.TestCase):
 
         self.assertEqual(result, expectedResult)
 
+    def test_update_as_str(self):
+        """
+        Unit test for an update operation represented as a string.
+        """
+
+        expectedResult = {
+                "statusCode": 200,
+                        "headers": {
+                            "Content-Type": "application/json"
+                        },
+                    "body": "{ \"message\": \"The response to the 'update' request was \" }"
+        }
+
+        result = lambda_handler(JsonsForTesting.updateAsStringRequest, None)
+
+        self.assertEqual(result, expectedResult)
+
+    def test_bad_update_expr(self):
+        """
+        Tests a bad expression given in an update query.
+        """
+
+        expectedResult = {
+                "statusCode": 200,
+                        "headers": {
+                            "Content-Type": "application/json"
+                        },
+                    "body": "{ \"message\": \"Only the increment expression is supported for now.\" }"
+        }
+
+        result = lambda_handler(JsonsForTesting.diffUpdateExpr, None)
+
+        self.assertEqual(result, expectedResult)
+
 
 
 if __name__ == '__main__':
@@ -246,4 +282,4 @@ if __name__ == '__main__':
     unittest.main()
 
     # myTests = TestLambda()
-    # myTests.test_bad_op_str()
+    # myTests.test_update_as_str()
