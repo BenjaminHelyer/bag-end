@@ -12,7 +12,8 @@ def lambda_handler(event, context):
     response = {
         "statusCode": 200,
         "headers": {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
         },
         "body": "{}"
     }
@@ -130,7 +131,8 @@ class ErrorHandler:
         self.emptyEventResponse = {
             "statusCode": 400,
             "headers": {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
             },
             "body": "{ \"message\": \"Error: event object passed to Lambda function is empty\" }"
         }
@@ -138,7 +140,8 @@ class ErrorHandler:
         self.badOpPayload = {
             "statusCode": 400,
             "headers": {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
             },
             "body": "{ \"message\": \"Error: bad operation or payload\" }"
         }
@@ -146,7 +149,8 @@ class ErrorHandler:
         self.noBodyKey = {
             "statusCode": 400,
             "headers": {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
             },
             "body": "{ \"message\": \"Error: no body found in event. Event was: "
                     + str(self.event)
@@ -156,7 +160,8 @@ class ErrorHandler:
         self.noOpKey = {
             "statusCode": 400,
             "headers": {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
             },
             "body": "{ \"message\": \"Error: event['body'] could be turned into dict, but no operation found in event['body']. event['body'] was: "
                     + str(self.getEventBody())
@@ -168,7 +173,8 @@ class ErrorHandler:
         self.badBodyFormat = {
             "statusCode": 400,
             "headers": {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
             },
             "body": "{ \"message\": \"Error: event['body'] could not be turned into dict. event['body'] was: "
                     + str(self.getEventBody())
@@ -180,7 +186,8 @@ class ErrorHandler:
         self.troublePerformingOpsFuncs = {
             "statusCode": 400,
             "headers": {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
             },
             "body": "{ \"message\": \"Error: trouble performing operation functions. event['body'] was: "
                     + str(self.getEventBody())

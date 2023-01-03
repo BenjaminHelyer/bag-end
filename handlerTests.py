@@ -118,6 +118,10 @@ class TestLambda(unittest.TestCase):
     """
     Test Object to use unittest library.
     """
+    _headers = {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+        }
 
     def test_empty_arg(self):
         """
@@ -126,9 +130,7 @@ class TestLambda(unittest.TestCase):
 
         expectedResult = {
             "statusCode": 400,
-            "headers": {
-                "Content-Type": "application/json"
-            },
+            "headers": self._headers,
             "body": "{ \"message\": \"Error: event object passed to Lambda function is empty\" }"
         }   
 
@@ -145,9 +147,7 @@ class TestLambda(unittest.TestCase):
 
         expectedResult = {
             "statusCode": 400,
-                "headers": {
-                    "Content-Type": "application/json"
-                },
+                "headers": self._headers,
                 "body": "{ \"message\": \"Error: no body found in event. Event was: "
                         + str(JsonsForTesting.junkRequest)
                         + "\" }"
@@ -164,9 +164,7 @@ class TestLambda(unittest.TestCase):
 
         expectedResult = {
             "statusCode": 400,
-                "headers": {
-                    "Content-Type": "application/json"
-                },
+                "headers": self._headers,
                 "body": "{ \"message\": \"Error: bad operation or payload\" }"
         }
 
@@ -181,9 +179,7 @@ class TestLambda(unittest.TestCase):
 
         expectedResult = {
             "statusCode": 200,
-            "headers": {
-                "Content-Type": "application/json"
-            },
+            "headers": self._headers,
             "body": "{ \"message\": \"The response to the 'create' request was \" }"
         }
 
@@ -198,9 +194,7 @@ class TestLambda(unittest.TestCase):
 
         expectedResult = {
                 "statusCode": 400,
-                "headers": {
-                    "Content-Type": "application/json"
-                },
+                "headers": self._headers,
                 "body": "{ \"message\": \"Error: bad operation or payload\" }"
         }
 
@@ -215,9 +209,7 @@ class TestLambda(unittest.TestCase):
 
         expectedResult = {
                 "statusCode": 200,
-                    "headers": {
-                        "Content-Type": "application/json"
-                    },
+                "headers": self._headers,
                 "body": "{ \"message\": \"The response to the 'create' request was \" }"
         }
 
@@ -232,10 +224,8 @@ class TestLambda(unittest.TestCase):
 
         expectedResult = {
                 "statusCode": 200,
-                        "headers": {
-                            "Content-Type": "application/json"
-                        },
-                    "body": "{ \"message\": \"The response to the 'update' request was \" }"
+                "headers": self._headers,
+                "body": "{ \"message\": \"The response to the 'update' request was \" }"
         }
 
         result = lambda_handler(JsonsForTesting.updateAsStringRequest, None)
@@ -249,10 +239,8 @@ class TestLambda(unittest.TestCase):
 
         expectedResult = {
                 "statusCode": 200,
-                        "headers": {
-                            "Content-Type": "application/json"
-                        },
-                    "body": "{ \"message\": \"Only the increment expression is supported for now.\" }"
+                "headers": self._headers,
+                "body": "{ \"message\": \"Only the increment expression is supported for now.\" }"
         }
 
         result = lambda_handler(JsonsForTesting.diffUpdateExpr, None)
@@ -266,10 +254,8 @@ class TestLambda(unittest.TestCase):
 
         expectedResult = {
                 "statusCode": 200,
-                        "headers": {
-                            "Content-Type": "application/json"
-                        },
-                    "body": "{ \"message\": \"The response to the 'read' request was \" }"
+                "headers": self._headers,
+                "body": "{ \"message\": \"The response to the 'read' request was \" }"
         }
 
         result = lambda_handler(JsonsForTesting.readAsStringRequest, None)
@@ -284,10 +270,8 @@ class TestLambda(unittest.TestCase):
 
         expectedResult = {
                 "statusCode": 200,
-                        "headers": {
-                            "Content-Type": "application/json"
-                        },
-                    "body": "{ \"message\": \"The response to the 'delete' request was \" }"
+                "headers": self._headers,
+                "body": "{ \"message\": \"The response to the 'delete' request was \" }"
         }
 
         # first lets create a new index, then delete that index
