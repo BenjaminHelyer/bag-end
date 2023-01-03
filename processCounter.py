@@ -21,7 +21,7 @@ def lambda_handler(event, context):
     # object that instantiates the database
     database = Db()
 
-    # objects taht instantiates the error handler
+    # objects that instantiates the error handler
     err = ErrorHandler(event)
 
     # dictionary for functions to perform on a given operation
@@ -32,9 +32,7 @@ def lambda_handler(event, context):
         'delete': database.delete
     }
 
-    # I'm not sure how to gracefully handle the case where it's passed an empty event
-    # Maybe it should return an error status code?
-    # Something like the following
+    # handle a few possible errors, then parse the event
     if event is None:
         # case where we don't even have an event
         response = err.emptyEventResponse
@@ -52,7 +50,6 @@ def lambda_handler(event, context):
                 # give a clear error if we can't load it using the JSON library
                 response = err.badBodyFormat
                 return response
-
             # at this point, turning the body into a dict succeeded
             # now we test for a good operation, finally performing the operation if we find it
             if 'operation' not in bodyAsDict.keys():
@@ -66,12 +63,13 @@ def lambda_handler(event, context):
                     response['body'] = opsResult
                 except:
                     response = err.troublePerformingOpsFuncs
+        # case in which the body is already a dict. Unlikely with API Gateway, but we want to handle this anyway.
         elif event['body']['operation'] in opsFuncs and event['body']['payload'] is not None:
             # call the relevent function from the Db class with the given payload
             opsResult = opsFuncs[event['body']['operation']](event['body']['payload'])
             response['body'] = opsResult
+        # if the above fails, send an error response indicating we got a bad operation or payload
         else:
-            # send an error response indicating we got a bad operation or payload
             response = err.badOpPayload
 
     return response
@@ -101,7 +99,6 @@ class Db:
             
     def update(self, payload):
         keyToUpdate = {'id': payload['Item']['id']}
-
         if payload['Item']['expression'] == '++':
             # expression for incrementing, which is the main expression we'll want for the visitor counter
             attribute = str(payload['Item']['attribute'])
