@@ -9,3 +9,6 @@ purpose of this project, is, in some way, an answer to my grandfather's question
 The website uses all the happy cloud resources. What I mean by this: it uses a
 serverless resource (Lambda), a NoSQL database (DynamoDB), and a content delivery network (CloudFront). 
 The repository has a CI/CD pipeline that uses IaC to deploy the resources.
+
+The backend and CI/CD are my implementations. The majority of the frontend is not mine (I used a template),
+though it has of course been adjusted to fit the purposes of the project.
